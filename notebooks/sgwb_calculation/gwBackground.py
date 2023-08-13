@@ -3,7 +3,7 @@ import time
 import sys
 import os
 import matplotlib.pyplot as plt
-from notebooks.sgwb_calculation.constants import *
+from constants import *
 from scipy.special import erf
 
 codeDir = os.path.dirname(os.path.realpath(__file__))
