@@ -1,6 +1,5 @@
+# Imports
 import numpy as np
-import time
-import sys
 import os
 import matplotlib.pyplot as plt
 from constants import *
