@@ -1,20 +1,33 @@
-# Imports
 import numpy as np
-
 # Constants
-c = 2.998e8 # speed of light
-G = 6.6743015e-11 # Gravitational constant
-Mpc = 3.086e16*1e6 # Mpc/m
-Gpc = Mpc*1e3 # Gpc/m
-km = 1.e3 # km/m
-H0 = 67.4*km/Mpc # Units of 1/s, Hubble constant
-Gyr = 1.e9*365.25*24*3600 # Gyr/s
-year = 365.*24*3600 # y/s
-OmgR = 9.182e-5 # radiation component of Hubble rate
-OmgM = 0.3111 # matter component of Hubble rate
-Omgk = 0 # curvature component of Hubble rate
-OmgL = 0.6889 # dark matter component of Hubble rate
+# Fundamental Constants
+G = 6.6743015e-11 # Gravitational constant (in m^3 kg^-1 s^-2)
+c = 2.99792458e8 # Speed of light (in m s^-1)
 
-Msun = 1.989e30 # solar mass, in kg
+# Unit Conversions
+km = 1e3 # km --> m
+Mpc = 3.08567758128e22 # Mpc --> m
+Gpc = 3.08567758128e25 # Gpc --> m
+Msun = 1.989e30 # Msun --> kg
 MsunToSec = Msun*G/np.power(c,3.)
-rhoC = 3.*np.power(H0*c,2.)/(8.*np.pi*G)*np.power(Mpc,3.) # Converted to J/Mpc^3, critical density
+yr = 60*60*24*365.25 # yr --> s
+
+# Merger Rate Constants
+alpha = 1.9 # spectral index before peak zp
+beta = 3.4 # spectral index after peak zp
+zp = 2.4 # peak redshift of merger rate
+R0 = 28.3 # current merger rate (in Gpc^-3 yr^-1)
+
+# Redshift Parameters
+z_max = 10 # maximum plausible redshift
+
+# Hubble Rate Constants
+H0 = 67.4 # Hubble constant (Hubble rate at z = 0) (in km s^-1 Mpc^-1)
+omegaR = 9.182e-5 # radiation component of energy density
+omegaM = 0.3111 # matter component of energy density
+omegak = 0 # spacetime curvature component of energy density
+omegaL = 0.6889 # dark energy component of energy density, cosmological constant
+
+# Mass Parameters
+BBH_min = 5 # minimum BBH mass
+BBH_max = 44 # maximum BBH mass

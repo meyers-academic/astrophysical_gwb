@@ -1,10 +1,15 @@
-# Imports
 import numpy as np
+import time
+import sys
 import os
+import matplotlib.pyplot as plt
 from constants import *
+import equations
 from scipy.special import erf
 
 codeDir = os.path.dirname(os.path.realpath(__file__))
+H0 = H0*km/Mpc
+rhoC = equations.pc(H0)*np.power(Mpc,3.)
 
 def v(Mtot,f):
     return np.array([(np.pi*Mtot*MsunToSec*f)**(1./3.), (np.pi*Mtot*MsunToSec*f)**(2./3.), (np.pi*Mtot*MsunToSec*f)])
@@ -191,7 +196,7 @@ class OmegaGW(object):
         """
 
         # Convert to number per Mpc^3 per sec and normalize merger rate density
-        R0 = R0/1e9/year
+        R0 = R0/1e9/yr
         dRdV_norm = R0*dRdV/dRdV[0]
 
         # Compute weighted average of energy-density spectrum, integrated over total mass and mass ratio space
@@ -201,7 +206,7 @@ class OmegaGW(object):
         
         # Redshift integrand
 #         R_invE = dRdV_norm/np.sqrt(OmgM*(1.+self.ref_zs)**3.+OmgL)/(1.+self.ref_zs)
-        R_invE = dRdV_norm/np.sqrt(OmgR*(1+self.ref_zs)**4.+OmgM*(1.+self.ref_zs)**3.+Omgk*(self.ref_zs)**2.+OmgL)/(1.+self.ref_zs)
+        R_invE = dRdV_norm/np.sqrt(omegaR*(1+self.ref_zs)**4.+omegaM*(1.+self.ref_zs)**3.+omegak*(self.ref_zs)**2.+omegaL)/(1.+self.ref_zs)
 
         # Integrate over redshifts via a dot product between dedf and the redshift-dependent R_invE
         dz = self.ref_zs[1]-self.ref_zs[0]
@@ -319,9 +324,3 @@ if __name__=="__main__":
     testObject.setProbs()
     e2 = testObject.eval(R0,dRdV,freqs)
     """
-
-
-
-
-
-
