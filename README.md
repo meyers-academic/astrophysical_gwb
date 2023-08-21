@@ -33,12 +33,13 @@ $\frac{dE}{df}$ is determined for each point in the probability grid:
 $$\frac{dE_\text{GW}}{df}=\frac{(G\pi)^{2/3}\mathcal{M}^{5/3}}{3}H(f)$$
 $$\mathcal{M}=\frac{(m_1m_2)^{3/5}}{(m_1+m_2)^{1/5}}$$
 $$H(f)=
-    \begin{cases}
-        f^{-1/3} & (f<f_\text{merge}) \\
-        \frac{f^{2/3}}{f_\text{merge}} & (f_\text{merge}\leq f<f_\text{ring}) \\
-        \frac{1}{f_\text{merge}f_\text{ring}^{4/3}}\bigg(\frac{f}{1+(\frac{f-f_\text{ring}}{\sigma/2})^2}\bigg)^2 & (f_\text{ring} \leq f<f_\text{cutoff}) \\
-        0 & (f\geq f_\text{cutoff})
-    \end{cases}$$
+\begin{cases}
+    f^{-1/3} && (f<f_\text{merge}) \\
+    \frac{f^{2/3}}{f_\text{merge}} && (f_\text{merge}\leq f<f_\text{ring}) \\
+    \frac{1}{f_\text{merge}f_\text{ring}^{4/3}}\bigg(\frac{f}{1+(\frac{f-f_\text{ring}}{\sigma/2})^2}\bigg)^2 && (f_\text{ring} \leq f<f_\text{cutoff}) \\
+    0 && (f\geq f_\text{cutoff})
+\end{cases}
+$$
 
 ## Method II: Numerical Integration
 The numerical integration method calculates the GW energy density as follows:
