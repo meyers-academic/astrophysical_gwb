@@ -13,7 +13,7 @@ MsunToSec = Msun*G/np.power(c,3.)
 yr = 60*60*24*365.25 # yr --> s
 
 # Merger Rate Constants
-alpha = 1.9 # spectral index before peak zp
+alpha = 3 # spectral index before peak zp
 beta = 3.4 # spectral index after peak zp
 zp = 2.4 # peak redshift of merger rate
 R0 = 28.3 # current merger rate (in Gpc^-3 yr^-1)

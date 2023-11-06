@@ -410,3 +410,10 @@ def get_R_array(zs, alpha, beta, zp, R0):
         mergerRate.append(R(alpha, beta, zs[i], zp, R0))
     mergerRate = np.array(mergerRate)
     return mergerRate
+
+
+def redshift_to_dl(z, omega_m=0.3, omega_lambda=0.7, H0=2e-18):
+    z_array = np.linspace(0, z, num=1000)
+    dz = z_array[1] - z_array[0]
+    e_of_z_array = np.sqrt(omega_m * (1 + z_array)**3 + omega_lambda)
+    return c / H0 * np.sum(dz / e_of_z_array)
