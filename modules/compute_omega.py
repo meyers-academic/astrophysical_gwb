@@ -70,15 +70,16 @@ def draw_injections(prior_dict, Tobs):
 
 
 def sample_dict_compute_injected_omega(
-    prior_dict,
+    injections,
+    # prior_dict,
     Tobs,
     duration=10,
     f_ref=25,
     sampling_frequency=2048,
-    approximant="IMRPhenomD",
+    approximant="IMRPhenomXPHM",
 ):
     # Calculate number of injections
-    injections = draw_injections(prior_dict, Tobs)
+    # injections = draw_injections(prior_dict, Tobs)
 
     # set up waveform generator
     waveform_generator = bilby.gw.WaveformGenerator(
@@ -129,7 +130,8 @@ def sample_dict_compute_injected_omega(
     Tobs_seconds = Tobs * 86400 * 365.25  # years to seconds
     omega_gw_freq *= 2 / Tobs_seconds
 
-    return freqs_psd, omega_gw_freq, injections
+    # return freqs_psd, omega_gw_freq, injections
+    return freqs_psd, omega_gw_freq
 
 
 def calculate_omega_gridded(prior_dict, fref=25):
