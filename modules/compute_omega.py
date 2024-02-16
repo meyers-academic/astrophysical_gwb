@@ -117,7 +117,7 @@ def sample_dict_compute_injected_omega(
                 inj_params[k] = injections[k]["content"][i]
             except:
                 inj_params[k] = injections[k][i]
-
+    
         # Get frequency domain waveform
         polarizations = waveform_generator.frequency_domain_strain(inj_params)
 
