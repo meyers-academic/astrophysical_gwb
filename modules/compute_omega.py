@@ -3,8 +3,9 @@ import numpy as np
 from loguru import logger
 from tqdm import tqdm
 
-from pygwb.constants import H0
-
+# from pygwb.constants import H0
+from constants import *
+H0 = H0*km/Mpc
 # Define redshift prior
 from bilby.gw.prior import Cosmological
 import numpy as np
@@ -125,7 +126,7 @@ def sample_dict_compute_injected_omega(
         psd = np.abs(polarizations["plus"]) ** 2 + np.abs(polarizations["cross"]) ** 2
 
         # Add to Omega_spectrum
-        omega_gw_freq += 2 * np.pi**2 * freqs_psd**3 * psd / (3 * H0.si.value**2)
+        omega_gw_freq += 2 * np.pi**2 * freqs_psd**3 * psd / (3 * H0**2)
 
     Tobs_seconds = Tobs * 86400 * 365.25  # years to seconds
     omega_gw_freq *= 2 / Tobs_seconds
