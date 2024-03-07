@@ -7,7 +7,7 @@ class BrokenPowerLawRedshiftPrior(Cosmological):
     Broken power law for merger rate as a function on redshift
     """
 
-    def __init__(self, minimum, maximum, R0, alpha, beta, zp, **kwargs):
+    def __init__(self, minimum, maximum, R0=28.3, alpha=3, beta=3.4, zp=2.4, **kwargs):
         """
         R0 is in units of Gpc^{-3} yr^{-1}
         """
@@ -29,6 +29,15 @@ class BrokenPowerLawRedshiftPrior(Cosmological):
         r = C * self.R0 * (1 + zs) ** (self.alpha) / (1 + ((1 + zs) / (1 + self.zp)) ** (self.alpha + self.beta))
         p_dz = (1 / (1 + zs)) * r * 4 * np.pi * self.cosmology.differential_comoving_volume(zs) * u.sr
         return zs, p_dz
+
+    def total_rate(self):
+        """
+        Get total rate integrated over all redshift in units of events / s^{-1}
+        """
+        zs, p_dz = self._get_redshift_arrays()
+        p_dz_centers = (p_dz[1:] + p_dz[:-1])/2.
+        total_sum = np.sum(np.diff(zs) * p_dz_centers)
+        return total_sum.value / (86400 * 365.25)
 
 
 class PowerLawRedshiftPrior(Cosmological):
