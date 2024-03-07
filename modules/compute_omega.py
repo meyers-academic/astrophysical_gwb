@@ -72,15 +72,17 @@ def draw_injections(prior_dict, Tobs):
 
 def sample_dict_compute_injected_omega(
     injections,
-    # prior_dict,
-    Tobs,
+    total_rate_of_mergers,
     duration=10,
     f_ref=25,
     sampling_frequency=2048,
     approximant="IMRPhenomXPHM",
+    return_type='omega_gw'
 ):
     # Calculate number of injections
     # injections = draw_injections(prior_dict, Tobs)
+    if return_type not in ['omega_gw', 'dEdf']:
+        raise ValueError("return type must be 'omega_gw' or 'dEdf'")
 
     # set up waveform generator
     waveform_generator = bilby.gw.WaveformGenerator(
@@ -97,8 +99,14 @@ def sample_dict_compute_injected_omega(
 
     # convert to seconds, set up frequency array for waveform
 
-    freqs_psd = waveform_generator.frequency_array
-    omega_gw_freq = np.zeros(len(freqs_psd))
+    if return_type == 'omega_gw':
+        freqs_psd = waveform_generator.frequency_array
+        omega_gw_freq = np.zeros(len(freqs_psd))
+        logger.info("Returning a single Omega_gw spectrum")
+    elif return_type == 'dEdf':
+        freqs_psd = waveform_generator.frequency_array
+        dE_dfs = []
+        logger.info("Returning a list of dEdf values for all waveforms supplied")
 
     try:
         N_inj = len(injections["geocent_time"]["content"])
@@ -118,7 +126,7 @@ def sample_dict_compute_injected_omega(
                 inj_params[k] = injections[k]["content"][i]
             except:
                 inj_params[k] = injections[k][i]
-    
+
         # Get frequency domain waveform
         polarizations = waveform_generator.frequency_domain_strain(inj_params)
 
@@ -126,13 +134,17 @@ def sample_dict_compute_injected_omega(
         psd = np.abs(polarizations["plus"]) ** 2 + np.abs(polarizations["cross"]) ** 2
 
         # Add to Omega_spectrum
-        omega_gw_freq += 2 * np.pi**2 * freqs_psd**3 * psd / (3 * H0**2)
+        if return_type=='omega_gw':
+            omega_gw_freq += 2 * np.pi**2 * freqs_psd**3 * psd / (3 * H0**2)
+        elif return_type == 'dEdf':
+            dE_dfs.append(psd)
 
-    Tobs_seconds = Tobs * 86400 * 365.25  # years to seconds
-    omega_gw_freq *= 2 / Tobs_seconds
-
-    # return freqs_psd, omega_gw_freq, injections
-    return freqs_psd, omega_gw_freq
+    # properly normalize
+    if return_type == 'omega_gw':
+        omega_gw_freq *= 2 * total_rate_of_mergers / N_inj
+        return freqs_psd, omega_gw_freq
+    elif return_type == 'dEdf':
+        return freqs_psd, np.array(dE_dfs)
 
 
 def calculate_omega_gridded(prior_dict, fref=25):
@@ -189,13 +201,3 @@ def calculate_omega_gridded(prior_dict, fref=25):
 
     return freqs_TC, OmegaGW_TC
 
-    # Plot
-    # fig, ax = plt.subplots()
-    # ax.loglog(freqs_TC, OmegaGW_TC, color='#7dd4fa')
-    # ax.loglog(freqs_TC, Omega_ref_TC * (freqs_TC / fref) ** (2 / 3), label='2/3 Power Law', color='#000000')
-    # ax.set_title(r'GW Energy Density Spectrum (Callister Method)')
-    # ax.set_xlabel(r'Frequency (Hz)')
-    # ax.set_ylabel(r'$\Omega_{GW}(f)$')
-    # ax.set_xlim(10, 1000)
-    # ax.legend()
-    # fig.show()
