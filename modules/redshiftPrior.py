@@ -1,8 +1,6 @@
+import numpy as np
 from astropy import units as u
 from bilby.gw.prior import Cosmological
-import numpy as np
-from gwpy.timeseries import TimeSeries
-
 
 
 class BrokenPowerLawRedshiftPrior(Cosmological):
