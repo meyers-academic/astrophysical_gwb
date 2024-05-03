@@ -11,19 +11,23 @@ import sys
 sys.path.append('../modules')
 
 def monteCarlo(
-    prior_dict,
-    # injections,
+    # prior_dict,
+    injections,
     Tobs,
     duration=10,
     f_ref=25,
     sampling_frequency=2048,
-    approximant="IMRPhenomD",
+    approximant="IMRPhenomXPHM",
 ):
     # Calculate number of injections
-    injections = draw_injections(prior_dict, Tobs)
+    # injections = draw_injections(prior_dict, Tobs)
 
-    injections['mass_1'] = injections['mass_1']*(1+injections['redshift'])
-    
+    try:
+        injections['mass_1'] = injections['mass_1']*(1+injections['redshift'])
+    except:
+        for j in range(len(injections['mass_1'])):
+            injections['mass_1'][j] = injections['mass_1'][j]*(1 + injections['redshift'][j])
+  
     # set up waveform generator
     waveform_generator = bilby.gw.WaveformGenerator(
         duration=duration,
@@ -38,7 +42,6 @@ def monteCarlo(
     )  # breaks down at M_tot * (1+z) ~ 1000, according to Xiao-Xiao and Haowen
 
     # convert to seconds, set up frequency array for waveform
-
     freqs_psd = waveform_generator.frequency_array
     omega_gw_freq = np.zeros(len(freqs_psd))
 
@@ -83,7 +86,7 @@ def MC2(
     duration=2,
     f_ref=25,
     sampling_frequency=2048,
-    approximant="IMRPhenomD",
+    approximant="IMRPhenomXPHM",
 ):
     injections = draw_injections(prior_dict, Tobs)
     dEdfs, freqs_psd = get_dedf(injections, duration=duration, sampling_frequency=sampling_frequency, approximant=approximant)
